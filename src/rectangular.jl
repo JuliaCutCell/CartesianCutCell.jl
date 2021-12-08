@@ -9,6 +9,7 @@ Operators on rectangular domains where :
 """
 laplacian
 
+laplacian(n::NTuple{Int}) = laplacian(n...)
 laplacian(n::Vararg{Int}) = laplacian(Dirichlet, n...)
 
 function laplacian(::Type{Dirichlet}, n::Int)
