@@ -1,8 +1,10 @@
 module CartesianCutCell
 
-const TupleN{T,N} = NTuple{N,T}
+using SparseArrays
 
 export laplacian
+
+const TupleN{T,N} = NTuple{N,T}
 
 include("boundary.jl")
 include("rectangular.jl")
