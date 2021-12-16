@@ -1,5 +1,6 @@
 module CartesianCutCell
 
+using LinearAlgebra
 using SparseArrays
 
 export laplacian
