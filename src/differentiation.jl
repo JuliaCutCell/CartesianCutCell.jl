@@ -7,10 +7,8 @@ forwarddiff(n::NTuple{N}) where {N} =
 
 forwarddiff((bc,), (n,)) = (forwarddiff(bc, n),)
 
-function forwarddiff(::Dirichlet, n::Int)
-    spdiagm(0 => -ones(n),
-            1 => ones(n-1))
-end
+forwarddiff(::Dirichlet, n::Int) =
+    Bidiagonal(-ones(n), ones(n-1), :U)
 
 function forwarddiff(::Periodic, n::Int)
     spdiagm(1-n => ones(1),
@@ -22,17 +20,17 @@ function forwarddiff(bc::NTuple{2}, n::NTuple{2})
     opn = forwarddiff.(bc, n)
     eye = I.(n)
 
-    kron(eye[2], opn[1]),
-    kron(opn[2], eye[1])
+    ApplyArray(kron, eye[2], opn[1]),
+    ApplyArray(kron, opn[2], eye[1])
 end
 
 function forwarddiff(bc::NTuple{3}, n::NTuple{3})
     opn = forwarddiff.(bc, n)
     eye = I.(n)
 
-    kron(eye[3], eye[2], opn[1]),
-    kron(eye[3], opn[2], eye[1]),
-    kron(opn[3], eye[2], eye[1])
+    ApplyArray(kron, eye[3], eye[2], opn[1]),
+    ApplyArray(kron, eye[3], opn[2], eye[1]),
+    ApplyArray(kron, opn[3], eye[2], eye[1])
 end
 
 """
@@ -44,10 +42,8 @@ backwarddiff(n::NTuple{N}) where {N} =
 
 backwarddiff((bc,), (n,)) = (backwarddiff(bc, n),)
 
-function backwarddiff(::Dirichlet, n::Int)
-    spdiagm(-1 => -ones(n-1),
-            0 => ones(n))
-end
+backwarddiff(::Dirichlet, n::Int) =
+    Bidiagonal(ones(n), -ones(n-1), :L)
 
 function backwarddiff(::Periodic, n::Int)
     spdiagm(-1 => -ones(n-1),
@@ -59,16 +55,16 @@ function backwarddiff(bc::NTuple{2}, n::NTuple{2})
     opn = backwarddiff.(bc, n)
     eye = I.(n)
 
-    kron(eye[2], opn[1]),
-    kron(opn[2], eye[1])
+    ApplyArray(kron, eye[2], opn[1]),
+    ApplyArray(kron, opn[2], eye[1])
 end
 
 function backwarddiff(bc::NTuple{3}, n::NTuple{3})
     opn = backwarddiff.(bc, n)
     eye = I.(n)
 
-    kron(eye[3], eye[2], opn[1]),
-    kron(eye[3], opn[2], eye[1]),
-    kron(opn[3], eye[2], eye[1])
+    ApplyArray(kron, eye[3], eye[2], opn[1]),
+    ApplyArray(kron, eye[3], opn[2], eye[1]),
+    ApplyArray(kron, opn[3], eye[2], eye[1])
 end
 
