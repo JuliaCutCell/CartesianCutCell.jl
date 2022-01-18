@@ -5,9 +5,8 @@ Uniform mesh.
 
 """
 function mesh(start, stop, length)
-    coor = collect.(range.(start, stop, length))
-    eye = ones.(Bool, length)
-    eye = ones.(length)
+    coor = range.(start, stop, length)
+    eye = Ones{Bool}.(length)
     _mesh(coor, eye)
 end
 

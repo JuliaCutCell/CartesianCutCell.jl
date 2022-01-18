@@ -3,7 +3,7 @@
 forwardinterp
 
 forwardinterp(n::NTuple{N}) where {N} =
-    forwardinterp(ntuple(i -> dirichlet, Val(N)), n)
+    forwardinterp(ntuple(i -> periodic, Val(N)), n)
 
 forwardinterp((bc,), (n,)) = (forwardinterp(bc, n),)
 
@@ -18,7 +18,7 @@ end
 
 function forwardinterp(bc::NTuple{2}, n::NTuple{2})
     opn = forwardinterp.(bc, n)
-    eye = I.(n)
+    eye = Eye{Bool}.(n)
 
     ApplyArray(kron, eye[2], opn[1]),
     ApplyArray(kron, opn[2], eye[1])
@@ -26,7 +26,7 @@ end
 
 function forwardinterp(bc::NTuple{3}, n::NTuple{3})
     opn = forwardinterp.(bc, n)
-    eye = I.(n)
+    eye = Eye{Bool}.(n)
 
     ApplyArray(kron, eye[3], eye[2], opn[1]),
     ApplyArray(kron, eye[3], opn[2], eye[1]),
@@ -38,7 +38,7 @@ end
 backwardinterp
 
 backwardinterp(n::NTuple{N}) where {N} =
-    backwardinterp(ntuple(i -> dirichlet, Val(N)), n)
+    backwardinterp(ntuple(i -> periodic, Val(N)), n)
 
 backwardinterp((bc,), (n,)) = (backwardinterp(bc, n),)
 
@@ -53,7 +53,7 @@ end
 
 function backwardinterp(bc::NTuple{2}, n::NTuple{2})
     opn = backwardinterp.(bc, n)
-    eye = I.(n)
+    eye = Eye{Bool}.(n)
 
     ApplyArray(kron, eye[2], opn[1]),
     ApplyArray(kron, opn[2], eye[1])
@@ -61,7 +61,7 @@ end
 
 function backwardinterp(bc::NTuple{3}, n::NTuple{3})
     opn = backwardinterp.(bc, n)
-    eye = I.(n)
+    eye = Eye{Bool}.(n)
 
     ApplyArray(kron, eye[3], eye[2], opn[1]),
     ApplyArray(kron, eye[3], opn[2], eye[1]),
