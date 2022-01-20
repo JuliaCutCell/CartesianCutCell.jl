@@ -15,8 +15,6 @@ export laplacian
 export forwarddiff, backwarddiff
 export forwardinterp, backwardinterp
 
-const TupleN{T,N} = NTuple{N,T}
-
 include("boundary.jl")
 include("grid.jl")
 include("mask.jl")
