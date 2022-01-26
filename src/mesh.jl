@@ -26,13 +26,13 @@ _mesh(coor::NTuple{3}, eye::NTuple{3}) =
 """
 """
 mesh
-
-mesh(n::NTuple{N,Int}, args...) where {N} =
-    mesh(ntuple(i -> dirichlet, Val(N)), n, args...)
+#
+#mesh(n::NTuple{N,Int}, args...) where {N} =
+#    mesh(ntuple(i -> dirichlet, Val(N)), n, args...)
 
 function mesh(bc, n, args...)
     coor = _mesh.(bc, n, args...)
-    eye = Ones{Bool}.(n)
+    eye = @. Ones{Bool}(n + 2length(bc))
     _mesh(coor, eye)
 end
 

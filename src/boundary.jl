@@ -9,4 +9,5 @@ const dirichlet = Dirichlet(1)
 const periodic = Periodic()
 
 Base.length(bc::Dirichlet) = getproperty(bc, :width)
+Base.length(::Periodic) = zero(Int)
 
