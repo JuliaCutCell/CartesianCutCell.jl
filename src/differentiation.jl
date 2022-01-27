@@ -1,11 +1,6 @@
 """
 """
 forwarddiff
-#
-#forwarddiff(n::NTuple{N}) where {N} =
-#    forwarddiff(ntuple(i -> periodic, Val(N)), n)
-#
-#forwarddiff((bc,), (n,)) = (forwarddiff(bc, n),)
 
 function forwarddiff(bc, n)
     opn = _forwarddiff.(bc, n)
@@ -35,11 +30,6 @@ _forwarddiff(opn::NTuple{3,Any}, eye::NTuple{3,Any}) =
 """
 """
 backwarddiff
-#
-#backwarddiff(n::NTuple{N}) where {N} =
-#    backwarddiff(ntuple(i -> periodic, Val(N)), n)
-#
-#backwarddiff((bc,), (n,)) = (backwarddiff(bc, n),)
 
 function backwarddiff(bc, n)
     opn = _backwarddiff.(bc, n)

@@ -1,11 +1,6 @@
 """
 """
 forwardinterp
-#
-#forwardinterp(n::NTuple{N}) where {N} =
-#    forwardinterp(ntuple(i -> periodic, Val(N)), n)
-#
-#forwardinterp((bc,), (n,)) = (forwardinterp(bc, n),)
 
 function forwardinterp(bc, n)
     opn = _forwardinterp.(bc, n)
@@ -35,11 +30,6 @@ _forwardinterp(opn::NTuple{3,Any}, eye::NTuple{3,Any}) =
 """
 """
 backwardinterp
-#
-#backwardinterp(n::NTuple{N}) where {N} =
-#    backwardinterp(ntuple(i -> periodic, Val(N)), n)
-#
-#backwardinterp((bc,), (n,)) = (backwardinterp(bc, n),)
 
 function backwardinterp(bc, n)
     opn = _backwardinterp.(bc, n)
