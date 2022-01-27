@@ -6,7 +6,7 @@ function laplacian()
     st = stencil(bc)
     n = (3, 4)
 
-    n̅, x̅, x̅ₘ = mesh(bc, st, n)
+    n̅, x̅, x̅ₘ, dx̅ = mesh(bc, st, n)
 
     δ̅₋, δ̅₊ = backwarddiff(bc, n̅), forwarddiff(bc, n̅)
     σ̅₋, σ̅₊ = backwardinterp(bc, n̅), forwardinterp(bc, n̅)
@@ -26,7 +26,7 @@ function laplacian()
     norm(y - yₕ)
 end
 
-@testset "logical" begin
+@testset "rectangular" begin
     @test isapprox(laplacian(), 0, atol=1e-15)
 end
 

@@ -1,5 +1,5 @@
 using CartesianCutCell
 using Test
 
-include("logical.jl")
+include("rectangular.jl")
 
