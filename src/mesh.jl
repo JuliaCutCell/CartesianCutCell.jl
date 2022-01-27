@@ -30,19 +30,21 @@ mesh
 #mesh(n::NTuple{N,Int}, args...) where {N} =
 #    mesh(ntuple(i -> dirichlet, Val(N)), n, args...)
 
-function mesh(bc, n, args...)
-    coor = _mesh.(bc, n, args...)
-    eye = @. Ones{Bool}(n + 2length(bc))
-    _mesh(coor, eye)
+function mesh(bc, st, n, args...)
+    coor = _mesh.(bc, st, n, args...)
+    n̅ = @. n + 2width(st) * has(bc)
+    eye = Ones{Bool}.(n̅)
+    x̅, x̅ₘ = _mesh(coor, eye)
+    n̅, x̅, x̅ₘ
 end
 
-function _mesh(bc::Dirichlet, n::Int, func=identity)
-    m = length(bc)
-    func.(range(-m, n+m-1, n+2m) ./ (n-1)),
-    func.(range(1-2m, 2(n+m)-1, n+2m) ./ (2n-2))
+function _mesh(bc::Dirichlet, st, n::Int, func=identity)
+    w = width(st)
+    func.(range(-w, n+w-1, n+2w) ./ (n-1)),
+    func.(range(1-2w, 2(n+w)-1, n+2w) ./ (2n-2))
 end
 
-_mesh(::Periodic, n::Int, func=identity) =
+_mesh(::Periodic, ::Any, n::Int, func=identity) =
     func.(range(0, n-1, n) ./ n),
     func.(range(1, 2n-1, n) ./ 2n)
 

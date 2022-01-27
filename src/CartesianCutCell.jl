@@ -6,23 +6,25 @@ using FillArrays
 using LazyArrays
 
 export dirichlet, periodic
+export mac, stencil
 
 export mesh
 #export mask
 #export pad
-export prune
+export restrict
 
 export laplacian
 export forwarddiff, backwarddiff
 export forwardinterp, backwardinterp
 
 include("boundary.jl")
+include("stencil.jl")
 include("mesh.jl")
 #include("mask.jl")
 #include("pad.jl")
 include("rectangular.jl")
 include("differentiation.jl")
 include("interpolation.jl")
-include("prune.jl")
+include("restrict.jl")
 
 end

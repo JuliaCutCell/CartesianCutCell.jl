@@ -9,21 +9,17 @@ forwarddiff
 
 function forwarddiff(bc, n)
     opn = _forwarddiff.(bc, n)
-    eye = @. Eye{Bool}(n + 2length(bc))
+    eye = Eye{Bool}.(n)
     _forwarddiff(opn, eye)
 end
 
-function _forwarddiff(bc::Dirichlet, n::Int)
-    m = length(bc)
-    Bidiagonal(-ones(n+2m), ones(n+2m-1), :U)
-end
+_forwarddiff(::Dirichlet, n::Int) =
+    Bidiagonal(-ones(n), ones(n-1), :U)
 
-function _forwarddiff(bc::Periodic, n::Int)
-    m = length(bc)
+_forwarddiff(::Periodic, n::Int) =
     spdiagm(1-n => ones(1),
-            0 => -ones(n+2m),
-            1 => ones(n+2m-1))
-end
+            0 => -ones(n),
+            1 => ones(n-1))
 
 _forwarddiff(opn::NTuple{1}, eye::NTuple{1}) = opn
 
@@ -47,21 +43,17 @@ backwarddiff
 
 function backwarddiff(bc, n)
     opn = _backwarddiff.(bc, n)
-    eye = @. Eye{Bool}(n + 2length(bc))
+    eye = Eye{Bool}.(n)
     _backwarddiff(opn, eye)
 end
 
-function _backwarddiff(bc::Dirichlet, n::Int)
-    m = length(bc)
-    Bidiagonal(ones(n+2m), -ones(n+2m-1), :L)
-end
+_backwarddiff(::Dirichlet, n::Int) =
+    Bidiagonal(ones(n), -ones(n-1), :L)
 
-function _backwarddiff(bc::Periodic, n::Int)
-    m = length(bc)
-    spdiagm(-1 => -ones(n+2m-1),
-            0 => ones(n+2m),
+_backwarddiff(::Periodic, n::Int) =
+    spdiagm(-1 => -ones(n-1),
+            0 => ones(n),
             n - 1 => -ones(1))
-end
 
 _backwarddiff(opn::NTuple{1}, eye::NTuple{1}) = opn
 

@@ -9,21 +9,17 @@ forwardinterp
 
 function forwardinterp(bc, n)
     opn = _forwardinterp.(bc, n)
-    eye = @. Eye{Bool}(n + 2length(bc))
+    eye = Eye{Bool}.(n)
     _forwardinterp(opn, eye)
 end
 
-function _forwardinterp(bc::Dirichlet, n::Int)
-    m = length(bc)
-    Bidiagonal(ones(n+2m) / 2, ones(n+2m-1) / 2, :U)
-end
+_forwardinterp(::Dirichlet, n::Int) =
+    Bidiagonal(ones(n) / 2, ones(n-1) / 2, :U)
 
-function _forwardinterp(bc::Periodic, n::Int)
-    m = length(bc)
+_forwardinterp(::Periodic, n::Int) =
     spdiagm(1-n => ones(1) / 2,
-            0 => ones(n+2m) / 2,
-            1 => ones(n+2m-1) / 2)
-end
+            0 => ones(n) / 2,
+            1 => ones(n-1) / 2)
 
 _forwardinterp(opn::NTuple{1}, eye::NTuple{1}) = opn
 
@@ -47,21 +43,17 @@ backwardinterp
 
 function backwardinterp(bc, n)
     opn = _backwardinterp.(bc, n)
-    eye = @. Eye{Bool}(n + 2length(bc))
+    eye = Eye{Bool}.(n)
     _backwardinterp(opn, eye)
 end
 
-function _backwardinterp(bc::Dirichlet, n::Int)
-    m = length(bc)
-    Bidiagonal(ones(n+2m) / 2, ones(n+2m-1) / 2, :L)
-end
+_backwardinterp(::Dirichlet, n::Int) =
+    Bidiagonal(ones(n) / 2, ones(n-1) / 2, :L)
 
-function _backwardinterp(bc::Periodic, n::Int)
-    m = length(bc)
-    spdiagm(-1 => ones(n+2m-1) / 2,
-            0 => ones(n+2m) / 2,
+_backwardinterp(::Periodic, n::Int) =
+    spdiagm(-1 => ones(n-1) / 2,
+            0 => ones(n) / 2,
             n - 1 => ones(1) / 2)
-end
 
 _backwardinterp(opn::NTuple{1}, eye::NTuple{1}) = opn
 

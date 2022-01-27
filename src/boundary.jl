@@ -1,13 +1,11 @@
 abstract type BoundaryCondition end
 
-struct Dirichlet <: BoundaryCondition
-    width::Int
-end
+struct Dirichlet <: BoundaryCondition end
 struct Periodic <: BoundaryCondition end
 
-const dirichlet = Dirichlet(1)
+const dirichlet = Dirichlet()
 const periodic = Periodic()
 
-Base.length(bc::Dirichlet) = getproperty(bc, :width)
-Base.length(::Periodic) = zero(Int)
+has(::Dirichlet) = true
+has(::Periodic) = false
 

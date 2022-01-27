@@ -1,38 +1,31 @@
+using LinearAlgebra
 using SparseArrays
 using CartesianCutCell
 
-#=
-const center = Val(0x0)
-const face = (Val(0x1), Val(0x2), Val(0x4))
-const edge = (Val(0x6), Val(0x5), Val(0x3))
-const node = Val(0x7)
-=#
-
-n = (3, 3)
 bc = (dirichlet, periodic)
+st = stencil(bc)
+n = (3, 4)
 
-x̅, x̅ₘ = mesh(bc, n)
+n̅, x̅, x̅ₘ = mesh(bc, st, n)
 
-δ̅₋, δ̅₊ = backwarddiff(bc, n), forwarddiff(bc, n)
-σ̅₋, σ̅₊ = backwardinterp(bc, n), forwardinterp(bc, n)
-
-#μ, ρ = mask(n), pad(n)
-#Δ = ρ - sparse(μ) * mapreduce(*, +, δ₋, δ₊) * μ
+δ̅₋, δ̅₊ = backwarddiff(bc, n̅), forwarddiff(bc, n̅)
+σ̅₋, σ̅₊ = backwardinterp(bc, n̅), forwardinterp(bc, n̅)
 
 Δ̅ = -mapreduce(*, +, δ̅₋, δ̅₊)
+Δ = restrict(Δ̅, n̅, n) |> sparse
 
-Δ = prune(bc, n, Δ̅)
-b = rand(prod(n))
+x = restrict.(x̅, Ref(n̅), Ref(n))
+xₘ = restrict.(x̅ₘ, Ref(n̅), Ref(n))
 
-y = Δ \ b
+f(u, v) = π * u ^ 2 * v - √2 * v ^ 2 - √3u + 1
 
-#
+y = f.(x...) |> collect
+b = Δ * y
+yₕ = Δ \ b
 
-x = prune.(Ref(bc), Ref(n), x̅)
-xₘ = prune.(Ref(bc), Ref(n), x̅ₘ)
+@show norm(y - yₕ)
 
-using LinearAlgebra
-
+#=
 circle(x...; x₀=zero.(x), r=one(eltype(x))/2, f=identity) =
     f(norm(r)) - f(norm(x .- x₀))
 
@@ -56,3 +49,4 @@ save("coucou.svg", fig)
 #map(circle, x...)
 #using FillArrays
 #Ones{Float64}.(n)
+=#
