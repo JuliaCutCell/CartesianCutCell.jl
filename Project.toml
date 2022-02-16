@@ -11,7 +11,7 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Vofinit = "1beee101-8e09-4165-b3f9-a3e33534e38b"
 
 [compat]
-FillArrays = "0.12"
+FillArrays = "0.12, 0.13"
 LazyArrays = "0.22"
 julia = "1"
 
